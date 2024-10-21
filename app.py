@@ -3,11 +3,20 @@ import os
 
 import aws_cdk as cdk
 
-from cdk_assnmt.cdk_assnmt_stack import CdkAssnmtStack
+from aws_cdk import (
+    Stack,
+    aws_ec2 as ec2,
+)
+from cdk_assnmt.cdk_network_stack import CdkNetworkStack
+from cdk_assnmt.cdk_server_stack import CdkServerStack
 
 
 app = cdk.App()
-CdkAssnmtStack(app, "CdkAssnmtStack",
+
+NetworkStack = CdkNetworkStack(app, "CdkNetworkStack")
+vpc = ec2.Vpc(NetworkStack,"MyVpc", max_azs = 2)
+
+CdkServerStack(app, "CdkServerStack", cdk_vpc = vpc
     # If you don't specify 'env', this stack will be environment-agnostic.
     # Account/Region-dependent features and context lookups will not work,
     # but a single synthesized template can be deployed anywhere.
